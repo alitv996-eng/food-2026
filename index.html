@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台北美食地圖 · 永康街 × 中正紀念堂 × 101</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F8F7F4;--card:#FFFFFF;--text:#1a1a18;--text-sub:#6b6b67;--text-hint:#9e9e9a;
+  --border:rgba(0,0,0,0.08);--border-hover:rgba(0,0,0,0.14);
+  --green:#2E7D52;--navy:#1B3A6B;--amber:#B45309;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased;}
+
+.hero{background:#0f0f0d;color:#fff;text-align:center;padding:4rem 1.5rem 3rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.015) 2px,rgba(255,255,255,0.015) 4px);pointer-events:none;}
+.hero-eyebrow{font-size:11px;letter-spacing:0.2em;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-bottom:1rem;}
+.hero-title{font-family:'Noto Serif TC',serif;font-size:clamp(28px,6vw,48px);font-weight:900;line-height:1.2;margin-bottom:0.6rem;}
+.hero-title span{color:#A8D5A2;}
+.hero-sub{font-size:14px;color:rgba(255,255,255,0.4);font-weight:300;}
+
+.nav-pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:1.75rem 1.25rem 0;}
+.nav-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:100px;font-size:12.5px;font-weight:500;text-decoration:none;border:1.5px solid transparent;transition:all 0.2s;}
+.nav-pill.g{background:rgba(46,125,82,0.09);color:var(--green);border-color:rgba(46,125,82,0.2);}
+.nav-pill.g:hover{background:var(--green);color:#fff;}
+.nav-pill.n{background:rgba(27,58,107,0.09);color:var(--navy);border-color:rgba(27,58,107,0.2);}
+.nav-pill.n:hover{background:var(--navy);color:#fff;}
+.nav-pill.a{background:rgba(180,83,9,0.09);color:var(--amber);border-color:rgba(180,83,9,0.2);}
+.nav-pill.a:hover{background:var(--amber);color:#fff;}
+
+main{max-width:840px;margin:0 auto;padding:3rem 1.25rem 5rem;}
+
+.section{margin-bottom:3.5rem;animation:fadeUp 0.5s ease both;}
+.section:nth-child(1){animation-delay:0.05s;}
+.section:nth-child(2){animation-delay:0.12s;}
+.section:nth-child(3){animation-delay:0.19s;}
+.section:nth-child(4){animation-delay:0.26s;}
+
+.section-header{display:flex;align-items:flex-end;gap:10px;margin-bottom:0.75rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-bottom:5px;}
+.dot.g{background:var(--green);}
+.dot.n{background:var(--navy);}
+.dot.a{background:var(--amber);}
+.section-title{font-family:'Noto Serif TC',serif;font-size:20px;font-weight:600;}
+.section-title small{display:block;font-family:'Noto Sans TC',sans-serif;font-size:11.5px;font-weight:300;color:var(--text-hint);letter-spacing:0.05em;margin-top:2px;}
+.section-count{margin-left:auto;font-size:12px;color:var(--text-hint);margin-bottom:3px;white-space:nowrap;}
+
+.tip-banner{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:#FFFBEB;border:1px solid rgba(180,83,9,0.2);border-radius:10px;margin-bottom:1.25rem;font-size:12.5px;color:#92400E;line-height:1.6;}
+.tip-banner .tip-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
+
+.map-bar{display:flex;align-items:center;gap:10px;padding:9px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:1.1rem;text-decoration:none;font-size:13px;color:var(--text-sub);transition:border-color 0.2s,box-shadow 0.2s;}
+.map-bar:hover{border-color:var(--border-hover);box-shadow:0 2px 8px rgba(0,0,0,0.06);color:var(--text);}
+.map-bar .icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.map-bar .icon.g{background:rgba(46,125,82,0.08);}
+.map-bar .icon.n{background:rgba(27,58,107,0.08);}
+.map-bar .icon.a{background:rgba(180,83,9,0.08);}
+.map-bar .arr{margin-left:auto;opacity:0.28;font-size:17px;}
+
+.food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:9px;}
+
+.food-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0.9rem 1rem;text-decoration:none;color:inherit;display:block;transition:all 0.2s;position:relative;overflow:hidden;}
+.food-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity 0.2s;}
+.food-card.g::before{background:var(--green);}
+.food-card.n::before{background:var(--navy);}
+.food-card.a::before{background:var(--amber);}
+.food-card:hover{border-color:var(--border-hover);box-shadow:0 4px 14px rgba(0,0,0,0.07);transform:translateY(-1px);}
+.food-card:hover::before{opacity:1;}
+
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px;}
+.food-name{font-size:14px;font-weight:500;color:var(--text);line-height:1.4;flex:1;}
+.btn{display:inline-flex;align-items:center;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:500;white-space:nowrap;flex-shrink:0;transition:opacity 0.15s;margin-top:1px;}
+.btn:hover{opacity:0.7;}
+.btn.g{background:rgba(46,125,82,0.08);color:var(--green);}
+.btn.n{background:rgba(27,58,107,0.08);color:var(--navy);}
+.btn.a{background:rgba(180,83,9,0.08);color:var(--amber);}
+
+.food-note{font-size:11.5px;color:var(--text-sub);line-height:1.5;font-weight:300;}
+.food-note.warn{color:#B91C1C;}
+.food-note.star{color:#065F46;font-weight:400;}
+.food-note.caution{color:#92400E;}
+
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;margin-top:5px;font-weight:400;}
+.tag.must{background:#DCFCE7;color:#166534;}
+.tag.sweet{background:#FEF3C7;color:#92400E;}
+.tag.warn{background:#FEE2E2;color:#991B1B;}
+.tag.lunch{background:#E0F2FE;color:#075985;}
+.tag.night{background:#EDE9FE;color:#5B21B6;}
+
+footer{text-align:center;padding:2rem 1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text-hint);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:480px){.food-grid{grid-template-columns:1fr 1fr;}.food-name{font-size:13px;}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">Taipei · Food Guide Vol.2</div>
+  <h1 class="hero-title">台北<span>精選</span>美食</h1>
+  <p class="hero-sub">永康街 · 中正紀念堂 · 101通化街　點名稱即可導航</p>
+</div>
+
+<div class="nav-pills">
+  <a href="#yongkang" class="nav-pill g">🌿 永康街</a>
+  <a href="#zhongzheng1" class="nav-pill n">🏛 中正紀念堂・東門市場側</a>
+  <a href="#zhongzheng2" class="nav-pill n">🏛 中正紀念堂・南門市場側</a>
+  <a href="#101" class="nav-pill a">🌆 101・通化街夜市</a>
+</div>
+
+<main>
+
+  <!-- 永康街 -->
+  <div class="section" id="yongkang">
+    <div class="section-header">
+      <div class="dot g"></div>
+      <div class="section-title">永康街<small>Yongkang St. · 文青老街巷弄美食</small></div>
+      <div class="section-count">9 家</div>
+    </div>
+    <a href="https://maps.google.com/?q=永康街,台北市大安區" target="_blank" class="map-bar">
+      <div class="icon g">🗺</div><span>在 Google 地圖查看永康街位置</span><span class="arr">›</span>
+    </a>
+    <div class="food-grid">
+      <a href="https://share.google/MAnvspTmjsnPAj9yO" target="_blank" class="food-card g">
+        <div class="card-top"><span class="food-name">豐盛食堂</span><span class="btn g">導航 ›</span></div>
+        <div class="food-note">台灣家常菜</div>
+      </a>
+      <a href="https://share.google/DrUhwIq4AwPT9DFT4" target="_blank" class="food-card g">
+        <div class="card-top"><span class="food-name">悄悄好食</span><span class="btn g">導航 ›</span></div>
+        <div class="food-note">甜點</div>
+      </a>
+      <a href="https://share.google/85Mgy3z3ML0NCcmNZ" target="_blank" class="food-card g">
+        <div class="card-top"><span class="food-name">成真咖啡 永康店</span><span class="btn g">導航 ›</span></div>
+        <div class="food-note">Cometrue Coffee · 文青咖啡廳</div>
+      </a>
+      <a href="https://share.google/h5Wq26M9kDAkNm08P" target="_blank" class="food-card g">
+        <div class="card-top"><span class="food-name">大隱酒食</span><span class="btn g">導航 ›</span></div>
+        <div class="food-note">台灣菜 · 晚餐消夜</div>
+        <span class="tag night">消夜</span>
+      </a>
+      <a href="https://share.google/Nt03xGm86R7rq7ov6" target="_blank" class="food-card g">
+        <div class="card-top"><span class="food-name">芋艿川豆花 永康店</span><span class="btn g">導航 ›</span></div>
+        <div class="food-note">豆花甜點</div>
+      </a>
+      <a href="https://share.google/XhczWvkE5L9Y1c7AX" target="_blank" class="food-card g">
+        <div class="card-top"><span class="food-name">山海豆花</span><span class="btn g">導航 ›</span></div>
+        <div class="food-note">豆花</div>
+      </a>
+      <a href="https://share.google/srANcLUkSpvtoK16K" target="_blank" class="food-card g">
+        <div class="card-top"><span class="food-name">永康街小籠包</span><span class="btn g">導航 ›</span></div>
+        <div class="food-note">40年老字號 · 台式厚皮小籠包</div>
+        <span class="tag must">老字號</span>
+      </a>
+      <a href="https://share.google/SCziAW14w6LSpXpl6" target="_blank" class="food-card g">
+        <div class="card-top"><span class="food-name">小木屋鬆餅</span><span class="btn g">導航 ›</span></div>
+        <div class="food-note">台式鬆餅 · 多分店</div>
+        <span class="tag sweet">甜食</span>
+      </a>
+      <a href="https://share.google/b6NP4JnUTn35nPDKa" target="_blank" class="food-card g">
+        <div class="card-top"><span class="food-name">遊山茶訪</span><span class="btn g">導航 ›</span></div>
+        <div class="food-note">日式茶飲 · 永康街風格相符</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 中正紀念堂 東門市場側 -->
+  <div class="section" id="zhongzheng1">
+    <div class="section-header">
+      <div class="dot n"></div>
+      <div class="section-title">中正紀念堂 · 東門市場側<small>Chiang Kai-shek Memorial · Dongmen Market</small></div>
+      <div class="section-count">8 家</div>
+    </div>
+    <div class="tip-banner">
+      <span class="tip-icon">💡</span>
+      <span><strong>強烈推薦中午來東門市場！</strong>市場小吃只開午餐，晚上不開門。黃媽媽米粉湯是人間美味，一定要點一堆豬內臟！</span>
+    </div>
+    <a href="https://maps.google.com/?q=東門市場,台北市大安區" target="_blank" class="map-bar">
+      <div class="icon n">🗺</div><span>在 Google 地圖查看東門市場位置</span><span class="arr">›</span>
+    </a>
+    <div class="food-grid">
+      <a href="https://share.google/eQ4Zdsg2OWNAJtcdb" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">黃媽媽米粉湯</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note star">⭐ 頂級好吃！人間美味！內臟必點</div>
+        <span class="tag must">強力推薦</span>
+        <span class="tag lunch">午市限定</span>
+      </a>
+      <a href="https://share.google/HchLEuUm5QDblkOuD" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">東門劉家美味牛肉麵</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note">東門市場內</div>
+      </a>
+      <a href="https://share.google/iU6HlhCiCf0SLCYVl" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">江記東門豆花</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note">豆花甜品</div>
+      </a>
+      <a href="https://share.google/zKH3ZWcZLHLJRcVza" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">金山鵝肉店</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note caution">台灣鵝肉偏貴，但好吃的還是好吃</div>
+      </a>
+      <a href="https://share.google/Qz4rZXboWlp9IRI6N" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">清真馬叔餅舖</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note">清真認證餅舖</div>
+      </a>
+      <a href="https://share.google/wcBUUKfwt33bHgtXG" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">東門城滷肉飯</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note caution">分數低但推薦者覺得好吃，值得一試</div>
+      </a>
+      <a href="https://share.google/r9WsHW3lEi6BCqg62" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">惠Q潤餅</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note">台式潤餅</div>
+      </a>
+      <a href="https://share.google/JElDZgLDicYC7Qetc" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">杭州小籠湯包</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note caution">中正紀念堂旁，有名但價格偏高，分數因此偏低</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 中正紀念堂 南門市場側 -->
+  <div class="section" id="zhongzheng2">
+    <div class="section-header">
+      <div class="dot n"></div>
+      <div class="section-title">中正紀念堂 · 南門市場側<small>Nanmen Market Area</small></div>
+      <div class="section-count">5 家</div>
+    </div>
+    <a href="https://maps.google.com/?q=南門市場,台北市中正區" target="_blank" class="map-bar">
+      <div class="icon n">🗺</div><span>在 Google 地圖查看南門市場位置</span><span class="arr">›</span>
+    </a>
+    <div class="food-grid">
+      <a href="https://share.google/FvZ6aYAxWy5UUpUq1" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">臻味胡椒餅</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note caution">很有名但評價普通，路過可以試試</div>
+      </a>
+      <a href="https://share.google/vosumFjnUWsffjIHu" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">金峰魯肉飯</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note warn">⚠️ 推薦者認為難吃，雖然很顯眼請跳過</div>
+        <span class="tag warn">建議跳過</span>
+      </a>
+      <a href="https://share.google/RhXOYdL6tMU0VKD22" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">合歡刀削麵館</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note">南門市場二樓</div>
+      </a>
+      <a href="https://share.google/ocR5LaYtzfg1Kvm2d" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">合興糕糰店</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note">買一兩個帶著邊走邊吃</div>
+        <span class="tag sweet">伴手零食</span>
+      </a>
+      <a href="https://share.google/ASEId2OhZa36rsGa7" target="_blank" class="food-card n">
+        <div class="card-top"><span class="food-name">南門市場傳統豆花</span><span class="btn n">導航 ›</span></div>
+        <div class="food-note">市場內傳統甜品</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 101 通化街夜市 -->
+  <div class="section" id="101">
+    <div class="section-header">
+      <div class="dot a"></div>
+      <div class="section-title">101 · 通化街夜市<small>Taipei 101 · Linjiang St. Night Market</small></div>
+      <div class="section-count">3 家</div>
+    </div>
+    <div class="tip-banner" style="background:#FFF7ED;border-color:rgba(180,83,9,0.2);">
+      <span class="tip-icon">📍</span>
+      <span>這區推薦者比較不熟，以下是吃過覺得不錯的幾家，請自行探索更多！</span>
+    </div>
+    <a href="https://maps.google.com/?q=通化街夜市,台北市大安區" target="_blank" class="map-bar">
+      <div class="icon a">🗺</div><span>在 Google 地圖查看通化街夜市位置</span><span class="arr">›</span>
+    </a>
+    <div class="food-grid">
+      <a href="https://share.google/7Iji4SA0QeEQg0Qgc" target="_blank" class="food-card a">
+        <div class="card-top"><span class="food-name">半島牛肉麵</span><span class="btn a">導航 ›</span></div>
+        <div class="food-note">牛肉麵</div>
+      </a>
+      <a href="https://share.google/GDm0gBOPclY340rLx" target="_blank" class="food-card a">
+        <div class="card-top"><span class="food-name">御品元冰火湯圓</span><span class="btn a">導航 ›</span></div>
+        <div class="food-note">招牌冰火湯圓</div>
+        <span class="tag must">招牌必試</span>
+      </a>
+      <a href="https://share.google/1Ff0cmWrh4eQxf88k" target="_blank" class="food-card a">
+        <div class="card-top"><span class="food-name">傳奇地瓜球</span><span class="btn a">導航 ›</span></div>
+        <div class="food-note">夜市零食經典</div>
+        <span class="tag sweet">夜市小食</span>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<footer>共 25 家推薦 · 點「導航 ›」直接開啟 Google 地圖 · 標示⚠️請謹慎參考</footer>
+
+</body>
+</html>
